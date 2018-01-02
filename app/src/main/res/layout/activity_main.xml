@@ -23,6 +23,12 @@
             android:id="@+id/btn_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SendUDP" />
+            android:text="Send UDP 1" />
+
+        <Button
+            android:id="@+id/btn_send2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SEND UDP 2" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
