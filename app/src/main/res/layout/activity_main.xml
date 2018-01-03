@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/tview_log"
             android:layout_width="match_parent"
-            android:layout_height="149dp"
+            android:layout_height="246dp"
             android:text="TextView" />
 
         <Button
@@ -25,10 +25,5 @@
             android:layout_height="wrap_content"
             android:text="Send UDP 1" />
 
-        <Button
-            android:id="@+id/btn_send2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SEND UDP 2" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

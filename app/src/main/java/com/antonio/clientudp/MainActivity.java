@@ -25,7 +25,6 @@ import java.util.Enumeration;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     Button send_btn, send_btn1;
     DatagramSocket ds;
-//    InetAddress IPAddress;
 
     private static final String TAG = "MY";//MainActivity.class.getName();
 
@@ -35,13 +34,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         send_btn = (Button)findViewById(R.id.btn_send);
-        send_btn1 = (Button)findViewById(R.id.btn_send2);
         send_btn.setOnClickListener(this);
-        send_btn1.setOnClickListener(this);
 
         //TODO: NEED TO MOVE !!!
         try {
-            ds = new DatagramSocket(48655);
+            ds = new DatagramSocket(48656);
             //IPAddress = InetAddress.getByName("172.22.11.182");
 //            IPAddress = InetAddress.getByName("192.168.0.106");
         } catch (Exception e) {
@@ -53,41 +50,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StrictMode.setThreadPolicy(policy);
 
     }
-    public void send_UDP()
-    {
-        String dataText = "Hello";
-        //String port = "4445";
-        String port = "48655";
-        String host = "192.168.0.106";
-        //String host = "172.22.11.182";
-        String uriString = "udp://" + host + ":" + port + "/";
-        uriString += Uri.encode(dataText);
 
-        Toast.makeText(getApplicationContext(), "Send UDP message new_send_UDP() ", Toast.LENGTH_SHORT).show();
-        Uri uri = Uri.parse(uriString);
-        try {
-            Intent intent = new Intent(Intent.ACTION_SENDTO,uri);
-            intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            Log.e(TAG,"Button: SEND UDP to : " + uri);
-            startActivity(intent);
-        } catch (Exception e) {
-            String data = e.getMessage();
-            Log.e(TAG,"DATA MESSAGE: " + data)                                                                                                                   ;
-        }
-    }
+//    @Retention(SOURCE)
+//    @StringDef({
+//            POWER_SERVICE,
+//            WINDOW_SERVICE,
+//            LAYOUT_INFLATER_SERVICE
+//    })
+//    public @interface ServiceName {}
+//    public static final String POWER_SERVICE = "power";
+//    public static final String WINDOW_SERVICE = "window";
+//    public static final String LAYOUT_INFLATER_SERVICE = "layout_inflater";
+//  ...
+//    public abstract Object getSystemService(@ServiceName String name);
+
 
     public void send_UDP_msg() {
-              Toast.makeText(getApplicationContext(), "Send UDP message", Toast.LENGTH_LONG).show();
                 //DatagramSocket ds = null;
                 String Message = "Android Message";
                 try {
-//                      InetAddress IPAddress = InetAddress.getByName("172.22.11.182");
+//                      InetAddress IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
                       InetAddress IPAddress = InetAddress.getByName("192.168.0.106");
-
+                     //   InetAddress IPAddress = InetAddress.getByName("172.22.106.125");
+                    Toast.makeText(getApplicationContext(), "send_UDP_msg UDP message to " + IPAddress, Toast.LENGTH_LONG).show();
                         Log.d("MY","IPAddress " + IPAddress);
                         DatagramPacket dp = null;
-                       dp = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, 48655);
+                       dp = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, 48656);
             //         ds.setBroadcast(true);
                        ds.send(dp);
                    } catch (Exception e) {
@@ -98,9 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_send:
-                send_UDP();
-                break;
-            case R.id.btn_send2:
                 send_UDP_msg();
                 break;
         }
