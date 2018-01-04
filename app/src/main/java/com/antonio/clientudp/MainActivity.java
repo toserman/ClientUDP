@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
-    public static String SERVER_IP = "172.22.106.196";
+//    public static String SERVER_IP = "172.22.106.196";
+    public static String SERVER_IP = "192.168.0.109";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //TODO: NEED TO MOVE !!!
         try {
-            ds = new DatagramSocket(PORT);
+
+            //    ds = new DatagramSocket(PORT);
+
 //          IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
 //          IPAddress = InetAddress.getByName("192.168.0.106");
-            IPAddress = InetAddress.getByName("172.22.106.196");
+            //IPAddress = InetAddress.getByName("172.22.106.196");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
 
     public void setCommandName(@CommandName String name){
         this.Message = name;
