@@ -1,81 +1,68 @@
 package com.antonio.clientudp;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import java.lang.annotation.Retention;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Date;
-import java.util.Enumeration;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    Button send_btn, send_btn1;
+    Button send_btn;
     DatagramSocket ds;
+    InetAddress IPAddress;
+    String Message ;
 
-    private static final String TAG = "MY";//MainActivity.class.getName();
+    @Retention(SOURCE)
+    @StringDef({
+            TURN_ON,
+            TURN_OFF
+    })
+    public @interface CommandName {};
+    public static final String TURN_ON = "TurnOn";
+    public static final String TURN_OFF = "TurnOff";
+
+    public static final String TAG = "MY";//MainActivity.class.getName();
+    public static int PORT = 48656;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        send_btn = (Button)findViewById(R.id.btn_send);
+        send_btn = findViewById(R.id.btn_send);
         send_btn.setOnClickListener(this);
 
         //TODO: NEED TO MOVE !!!
         try {
-            ds = new DatagramSocket(48656);
-            //IPAddress = InetAddress.getByName("172.22.11.182");
-//            IPAddress = InetAddress.getByName("192.168.0.106");
+            ds = new DatagramSocket(PORT);
+//          IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
+//          IPAddress = InetAddress.getByName("192.168.0.106");
+            IPAddress = InetAddress.getByName("172.22.106.196");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //FOR AVOID NETWORK EXCEPTION
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
     }
 
-//    @Retention(SOURCE)
-//    @StringDef({
-//            POWER_SERVICE,
-//            WINDOW_SERVICE,
-//            LAYOUT_INFLATER_SERVICE
-//    })
-//    public @interface ServiceName {}
-//    public static final String POWER_SERVICE = "power";
-//    public static final String WINDOW_SERVICE = "window";
-//    public static final String LAYOUT_INFLATER_SERVICE = "layout_inflater";
-//  ...
-//    public abstract Object getSystemService(@ServiceName String name);
-
-
     public void send_UDP_msg() {
-                //DatagramSocket ds = null;
-                String Message = "Android Message";
                 try {
 //                      InetAddress IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
-                      InetAddress IPAddress = InetAddress.getByName("192.168.0.106");
-                     //   InetAddress IPAddress = InetAddress.getByName("172.22.106.125");
+//                      InetAddress IPAddress = InetAddress.getByName("192.168.0.106");
+                        InetAddress IPAddress = InetAddress.getByName("172.22.106.196");
+
                     Toast.makeText(getApplicationContext(), "send_UDP_msg UDP message to " + IPAddress, Toast.LENGTH_LONG).show();
-                        Log.d("MY","IPAddress " + IPAddress);
+                        Log.d(TAG,"IPAddress " + IPAddress);
                         DatagramPacket dp = null;
-                       dp = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, 48656);
+                       dp = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, PORT);
             //         ds.setBroadcast(true);
                        ds.send(dp);
                    } catch (Exception e) {
@@ -86,10 +73,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_send:
-                send_UDP_msg();
+              //  send_UDP_msg();
+                setCommandName(TURN_ON);
+                new SendUDPdata(ds,IPAddress,PORT,getCommandName()).execute();
+                setCommandName(TURN_OFF);
+                new SendUDPdata(ds,IPAddress,PORT,getCommandName()).execute();
                 break;
         }
-
-
     }
+
+    public void setCommandName(@CommandName String name){
+        this.Message = name;
+    }
+    public String getCommandName(){
+        return this.Message;
+    }
+
+
 }
+
