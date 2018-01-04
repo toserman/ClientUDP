@@ -24,10 +24,6 @@ public class SendUDPdata extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... arg0) {
 
         try {
-//                      InetAddress IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
-//                      InetAddress IPAddress = InetAddress.getByName("192.168.0.106");
-            InetAddress IPAddress = InetAddress.getByName("172.22.106.196");
-
             Log.d(MainActivity.TAG, "Send to " + IPAddress + " Command: " + SendMsg );
             DatagramPacket dp = null;
             dp = new DatagramPacket(SendMsg.getBytes(), SendMsg.length(), IPAddress, udpPort);
