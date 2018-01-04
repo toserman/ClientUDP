@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
+    public static String SERVER_IP = "172.22.106.196";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +76,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_send:
               //  send_UDP_msg();
                 setCommandName(TURN_ON);
-                new SendUDPdata(ds,IPAddress,PORT,getCommandName()).execute();
+                new SendUDPdata(ds,SERVER_IP,PORT,getCommandName()).execute();
                 setCommandName(TURN_OFF);
-                new SendUDPdata(ds,IPAddress,PORT,getCommandName()).execute();
+                new SendUDPdata(ds,SERVER_IP,PORT,getCommandName()).execute();
                 break;
         }
     }
