@@ -16,8 +16,8 @@ import java.net.InetAddress;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    Button send_btn;
-    DatagramSocket ds;
+    Button send_btn,send_wol_btn;
+    //DatagramSocket ds;
     InetAddress IPAddress;
     String Message ;
 
@@ -32,8 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
-//    public static String SERVER_IP = "172.22.106.196";
-    public static String SERVER_IP = "192.168.0.109";
+    public static String SERVER_IP = "172.22.106.32";
+//    public static String SERVER_IP = "192.168.0.109";
+    public static final String MAC_WOL = "00:11:22:33:44:55";
+    public static final String IP_WOL = "192.168.0.255";
+
+    String macStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         send_btn = findViewById(R.id.btn_send);
+        send_wol_btn = findViewById(R.id.btn_send_wol);
         send_btn.setOnClickListener(this);
+        send_wol_btn.setOnClickListener(this);
 
         //TODO: NEED TO MOVE !!!
         try {
 
-            //    ds = new DatagramSocket(PORT);
+            //ds = new DatagramSocket(PORT);
 
 //          IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
 //          IPAddress = InetAddress.getByName("192.168.0.106");
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         DatagramPacket dp = null;
                        dp = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, PORT);
             //         ds.setBroadcast(true);
-                       ds.send(dp);
+                     //  ds.send(dp);
                    } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -79,13 +85,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_send:
               //  send_UDP_msg();
                 setCommandName(TURN_ON);
-                new SendUDPdata(ds,SERVER_IP,PORT,getCommandName()).execute();
+                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                 setCommandName(TURN_OFF);
-                new SendUDPdata(ds,SERVER_IP,PORT,getCommandName()).execute();
+                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+                break;
+            case R.id.btn_send_wol:
+                try	{
+                    macStr = SendWOL.cleanMac(MAC_WOL);
+                    Log.e(TAG,"Sending WOL to: " + macStr);
+                    SendWOL.send(macStr, IP_WOL);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
 
+
+    protected void onPause() {
+        Log.e("TAG", "STATE onPause" );
+        super.onPause();
+    }
+    @Override
+    protected void onResume() {
+        Log.e("TAG", "STATE onResume" );
+        super.onResume();
+    }
 
     public void setCommandName(@CommandName String name){
         this.Message = name;

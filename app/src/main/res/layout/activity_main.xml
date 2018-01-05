@@ -25,5 +25,11 @@
             android:layout_height="wrap_content"
             android:text="Send UDP 1" />
 
+        <Button
+            android:id="@+id/btn_send_wol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SEND_WOL" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

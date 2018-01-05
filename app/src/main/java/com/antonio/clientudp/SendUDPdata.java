@@ -15,10 +15,9 @@ public class SendUDPdata extends AsyncTask<Void, Void, Void> {
     private DatagramSocket DgrmSocket;
     private String ipAddress;
 
-    public SendUDPdata(DatagramSocket Socket, String inpIpaddress, int port, String Message) {
+    public SendUDPdata(String inpIpaddress, int port, String Message) {
         this.udpPort = port;
         this.SendMsg = Message;
-        this.DgrmSocket = Socket;
         this.ipAddress = inpIpaddress;
     }
 
@@ -29,14 +28,10 @@ public class SendUDPdata extends AsyncTask<Void, Void, Void> {
             Log.d(MainActivity.TAG, "Send to " + IPAddress + " Command: " + SendMsg );
             dp = new DatagramPacket(SendMsg.getBytes(), SendMsg.length(), IPAddress, udpPort);
 
-            if (DgrmSocket == null)
-            {
-                Log.e(MainActivity.TAG, "SOCKET WAS DESTROYED DgrmSocket !!!!");
-                DgrmSocket = new DatagramSocket(null);
-                DgrmSocket.setReuseAddress(true);
-                DgrmSocket.setBroadcast(true);
-                DgrmSocket.bind(new InetSocketAddress(this.udpPort));
-            }
+            DgrmSocket = new DatagramSocket(null);
+            DgrmSocket.setReuseAddress(true);
+            DgrmSocket.setBroadcast(true);
+            DgrmSocket.bind(new InetSocketAddress(this.udpPort));
 
             DgrmSocket.send(dp);
         } catch (Exception e) {
