@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 public class SendWOL {
 
     private static final String TAG = "MagicPacket";
-    public static final String BROADCAST = "192.168.1.255";
+    public static final String BROADCAST = "192.168.0.255";
     private static final int PORT = 9;
     private static final char SEPARATOR = ':';
 

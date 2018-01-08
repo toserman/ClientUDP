@@ -32,10 +32,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
-    public static String SERVER_IP = "172.22.106.32";
-//    public static String SERVER_IP = "192.168.0.109";
-    public static final String MAC_WOL = "00:11:22:33:44:55";
-    public static final String IP_WOL = "192.168.0.255";
+//    public static String SERVER_IP = "172.22.106.32";
+//    public static String SERVER_IP = "192.168.0.106";//Raspberry
+    public static String SERVER_IP = "192.168.0.105";
+    public static final String MAC_WOL = "90:2B:34:6A:19:0D";
+    public static final String IP_WOL = "192.168.255.255";
 
     String macStr;
 
@@ -48,18 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         send_wol_btn = findViewById(R.id.btn_send_wol);
         send_btn.setOnClickListener(this);
         send_wol_btn.setOnClickListener(this);
-
-        //TODO: NEED TO MOVE !!!
-        try {
-
-            //ds = new DatagramSocket(PORT);
-
-//          IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
-//          IPAddress = InetAddress.getByName("192.168.0.106");
-            //IPAddress = InetAddress.getByName("172.22.106.196");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
