@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
-//    public static String SERVER_IP = "172.22.106.32";
+    public static String SERVER_IP = "172.22.106.1";
 //    public static String SERVER_IP = "192.168.0.106";//Raspberry
-    public static String SERVER_IP = "192.168.0.105";
+//    public static String SERVER_IP = "192.168.0.105";
     public static final String MAC_WOL = "90:2B:34:6A:19:0D";
     public static final String IP_WOL = "192.168.255.255";
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
 //                      InetAddress IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
 //                      InetAddress IPAddress = InetAddress.getByName("192.168.0.106");
-                        InetAddress IPAddress = InetAddress.getByName("172.22.106.196");
+                        InetAddress IPAddress = InetAddress.getByName("172.22.105.107");
 
                     Toast.makeText(getApplicationContext(), "send_UDP_msg UDP message to " + IPAddress, Toast.LENGTH_LONG).show();
                         Log.d(TAG,"IPAddress " + IPAddress);
@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
               //  send_UDP_msg();
                 setCommandName(TURN_ON);
                 new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
-                setCommandName(TURN_OFF);
-                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+//                setCommandName(TURN_OFF);
+//                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                 break;
             case R.id.btn_send_wol:
                 try	{

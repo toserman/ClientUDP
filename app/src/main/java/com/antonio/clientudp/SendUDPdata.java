@@ -8,7 +8,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-public class SendUDPdata extends AsyncTask<Void, Void, Void> {
+public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
 
     private int udpPort;
     private String SendMsg;
@@ -21,7 +21,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Void> {
         this.ipAddress = inpIpaddress;
     }
 
-    protected Void doInBackground(Void... arg0) {
+    protected Integer doInBackground(Void... arg0) {
         try {
             DatagramPacket dp = null;
             InetAddress IPAddress = InetAddress.getByName(ipAddress);
@@ -37,11 +37,13 @@ public class SendUDPdata extends AsyncTask<Void, Void, Void> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return 100;
     }
 
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        Log.d("MY","ASYNC TASK WAS FINISHED !!!");
+        Log.d("MY","ASYNC TASK WAS FINISHED !!! Message sent : " + this.SendMsg +""
+                +" result =  " + result.toString());
+
     }
 }
