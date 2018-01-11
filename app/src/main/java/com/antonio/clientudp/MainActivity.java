@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
-    public static String SERVER_IP = "172.22.106.1";
-//    public static String SERVER_IP = "192.168.0.106";//Raspberry
+//    public static String SERVER_IP = "172.22.106.1";
+    public static String SERVER_IP = "192.168.0.106";//Raspberry
 //    public static String SERVER_IP = "192.168.0.105";
 
     @Override
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_turnOn_pc:
                 try	{
+                    //TODO: Add Window for asking !!!
                     setCommandName(TURN_ON);
                     new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                     output_txtview.append("Sent command:" + getCommandName() + "\n");
