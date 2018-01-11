@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.annotation.Retention;
@@ -16,7 +17,8 @@ import java.net.InetAddress;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    Button send_btn,send_wol_btn;
+    Button send_btn,send_turnOnPC_btn;
+    TextView output_txtview;
     //DatagramSocket ds;
     InetAddress IPAddress;
     String Message ;
@@ -24,21 +26,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Retention(SOURCE)
     @StringDef({
             TURN_ON,
-            TURN_OFF
+            TURN_OFF,
+            TEST
     })
     public @interface CommandName {};
     public static final String TURN_ON = "TurnOn";
     public static final String TURN_OFF = "TurnOff";
+    public static final String TEST = "TestPacket";
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
     public static String SERVER_IP = "172.22.106.1";
 //    public static String SERVER_IP = "192.168.0.106";//Raspberry
 //    public static String SERVER_IP = "192.168.0.105";
-    public static final String MAC_WOL = "90:2B:34:6A:19:0D";
-    public static final String IP_WOL = "192.168.255.255";
-
-    String macStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,43 +46,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         send_btn = findViewById(R.id.btn_send);
-        send_wol_btn = findViewById(R.id.btn_send_wol);
+        send_turnOnPC_btn = findViewById(R.id.btn_turnOn_pc);
         send_btn.setOnClickListener(this);
-        send_wol_btn.setOnClickListener(this);
+        send_turnOnPC_btn.setOnClickListener(this);
+        output_txtview = findViewById(R.id.tview_log);
 
     }
 
-    public void send_UDP_msg() {
-                try {
-//                      InetAddress IPAddress = InetAddress.getByName("172.22.11.182"); //Desktop
-//                      InetAddress IPAddress = InetAddress.getByName("192.168.0.106");
-                        InetAddress IPAddress = InetAddress.getByName("172.22.105.107");
-
-                    Toast.makeText(getApplicationContext(), "send_UDP_msg UDP message to " + IPAddress, Toast.LENGTH_LONG).show();
-                        Log.d(TAG,"IPAddress " + IPAddress);
-                        DatagramPacket dp = null;
-                       dp = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, PORT);
-            //         ds.setBroadcast(true);
-                     //  ds.send(dp);
-                   } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-    }
     @Override
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_send:
-              //  send_UDP_msg();
-                setCommandName(TURN_ON);
+                setCommandName(TEST);
                 new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+                output_txtview.append("Sent command:" + getCommandName() + "\n");
 //                setCommandName(TURN_OFF);
 //                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                 break;
-            case R.id.btn_send_wol:
+            case R.id.btn_turnOn_pc:
                 try	{
-                    macStr = SendWOL.cleanMac(MAC_WOL);
-                    Log.e(TAG,"Sending WOL to: " + macStr);
-                    SendWOL.send(macStr, IP_WOL);
+                    setCommandName(TURN_ON);
+                    new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+                    output_txtview.append("Sent command:" + getCommandName() + "\n");
+                    Log.e(TAG,"Sending TurnOn to PC");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

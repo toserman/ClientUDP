@@ -16,8 +16,7 @@
         <TextView
             android:id="@+id/tview_log"
             android:layout_width="match_parent"
-            android:layout_height="246dp"
-            android:text="TextView" />
+            android:layout_height="246dp" />
 
         <Button
             android:id="@+id/btn_send"
@@ -26,10 +25,10 @@
             android:text="Send UDP 1" />
 
         <Button
-            android:id="@+id/btn_send_wol"
+            android:id="@+id/btn_turnOn_pc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SEND_WOL" />
+            android:text="TURN ON PC" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
