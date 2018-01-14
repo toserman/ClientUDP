@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +18,8 @@ import java.net.InetAddress;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    Button send_btn,send_turnOnPC_btn;
+    //Button send_btn,send_turnOnPC_btn;
+    ImageButton turnOffPC_btn, turnOnPC_btn;
     TextView output_txtview;
     //DatagramSocket ds;
     InetAddress IPAddress;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int PORT = 48656;
 //    public static String SERVER_IP = "172.22.106.1";
     public static String SERVER_IP = "192.168.0.106";//Raspberry
+    public static String HOME_PC_IP= "192.168.0.102"; //Home PC
 //    public static String SERVER_IP = "192.168.0.105";
 
     @Override
@@ -45,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        send_btn = findViewById(R.id.btn_send);
-        send_turnOnPC_btn = findViewById(R.id.btn_turnOn_pc);
-        send_btn.setOnClickListener(this);
-        send_turnOnPC_btn.setOnClickListener(this);
+        turnOnPC_btn = findViewById(R.id.img_btn_turnOn_pc);
+        turnOffPC_btn = findViewById(R.id.img_btn_turnOff_pc);
+        turnOnPC_btn.setOnClickListener(this);
+        turnOffPC_btn.setOnClickListener(this);
         output_txtview = findViewById(R.id.tview_log);
 
     }
@@ -56,14 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v){
         switch (v.getId()) {
-            case R.id.btn_send:
-                setCommandName(TEST);
-                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
-                output_txtview.append("Sent command:" + getCommandName() + "\n");
-//                setCommandName(TURN_OFF);
-//                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
-                break;
-            case R.id.btn_turnOn_pc:
+            case R.id.img_btn_turnOn_pc:
                 try	{
                     //TODO: Add Window for asking !!!
                     setCommandName(TURN_ON);
@@ -73,6 +69,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.img_btn_turnOff_pc:
+
+                //setCommandName(TEST);
+//                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+//                String dataText = "TurnOff";
+//                String port = "48655";
+//                String host = "192.168.0.102";
+                setCommandName(TURN_OFF);
+                new SendUDPdata(HOME_PC_IP,PORT,getCommandName()).execute();
+                output_txtview.append("Sent command:" + getCommandName() + "\n");
+//                setCommandName(TURN_OFF);
+//                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                 break;
         }
     }

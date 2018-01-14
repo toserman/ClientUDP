@@ -16,19 +16,20 @@
         <TextView
             android:id="@+id/tview_log"
             android:layout_width="match_parent"
-            android:layout_height="246dp" />
+            android:layout_height="165dp"
+            tools:background="@android:color/background_dark" />
 
-        <Button
-            android:id="@+id/btn_send"
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/img_btn_turnOn_pc"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send UDP 1" />
+            app:srcCompat="@drawable/if_desktop_computer_45448" />
 
-        <Button
-            android:id="@+id/btn_turnOn_pc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TURN ON PC" />
+        <ImageButton
+            android:id="@+id/img_btn_turnOff_pc"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            app:srcCompat="@drawable/if_red_29_47874" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
