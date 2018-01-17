@@ -3,6 +3,7 @@ package com.antonio.clientudp;
 import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         turnOnPC_btn.setOnClickListener(this);
         turnOffPC_btn.setOnClickListener(this);
         output_txtview = findViewById(R.id.tview_log);
-
+        output_txtview.setMovementMethod(new ScrollingMovementMethod());
     }
 
     @Override
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.img_btn_turnOff_pc:
-
                 //setCommandName(TEST);
 //                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
 //                String dataText = "TurnOff";
