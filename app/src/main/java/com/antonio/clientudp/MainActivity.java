@@ -15,6 +15,7 @@ import java.lang.annotation.Retention;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Calendar;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //TODO: Add Window for asking !!!
                     setCommandName(TURN_ON);
                     new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
-                    output_txtview.append("Sent command:" + getCommandName() + "\n");
+                    output_txtview.append("Sent command:" + getCommandName()
+                                          + Calendar.getInstance().getTime() +"\n");
                     Log.e(TAG,"Sending TurnOn to PC");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -79,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                String host = "192.168.0.102";
                 setCommandName(TURN_OFF);
                 new SendUDPdata(HOME_PC_IP,PORT,getCommandName()).execute();
-                output_txtview.append("Sent command:" + getCommandName() + "\n");
+                output_txtview.append("Sent command:" + getCommandName()
+                                      + Calendar.getInstance().getTime() + "\n");
 //                setCommandName(TURN_OFF);
 //                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                 break;
