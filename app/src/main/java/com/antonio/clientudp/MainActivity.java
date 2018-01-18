@@ -15,12 +15,13 @@ import java.lang.annotation.Retention;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    //Button send_btn,send_turnOnPC_btn;
+    Button test_btn;
     ImageButton turnOffPC_btn, turnOnPC_btn;
     TextView output_txtview;
     //DatagramSocket ds;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         turnOnPC_btn = findViewById(R.id.img_btn_turnOn_pc);
         turnOffPC_btn = findViewById(R.id.img_btn_turnOff_pc);
+        test_btn = findViewById(R.id.btn_test);
+        test_btn.setOnClickListener(this);
         turnOnPC_btn.setOnClickListener(this);
         turnOffPC_btn.setOnClickListener(this);
         output_txtview = findViewById(R.id.tview_log);
@@ -60,15 +63,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v){
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        String TEST_SERVER_IP = "172.22.105.254";
         switch (v.getId()) {
             case R.id.img_btn_turnOn_pc:
                 try	{
                     //TODO: Add Window for asking !!!
+
                     setCommandName(TURN_ON);
                     new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
-                    output_txtview.append("Sent command:" + getCommandName()
-                                          + Calendar.getInstance().getTime() +"\n");
-                    Log.e(TAG,"Sending TurnOn to PC");
+                    output_txtview.append(" Sent command:" + getCommandName() + " "
+                                          + date +"\n");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -81,8 +86,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                String host = "192.168.0.102";
                 setCommandName(TURN_OFF);
                 new SendUDPdata(HOME_PC_IP,PORT,getCommandName()).execute();
-                output_txtview.append("Sent command:" + getCommandName()
-                                      + Calendar.getInstance().getTime() + "\n");
+                output_txtview.append(" Sent command:" + getCommandName() + " "
+                                      + date + "\n");
+//                setCommandName(TURN_OFF);
+//                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+                break;
+            case R.id.btn_test:
+                setCommandName(TEST);
+
+                new SendUDPdata(TEST_SERVER_IP,PORT,getCommandName()).execute();
+                output_txtview.append(" Sent command:" + getCommandName() + " "
+                        + date + "\n");
 //                setCommandName(TURN_OFF);
 //                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                 break;

@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/tview_log"
         android:layout_width="350dp"
-        android:layout_height="281dp"
+        android:layout_height="232dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -23,26 +23,41 @@
 
     <ImageButton
         android:id="@+id/img_btn_turnOn_pc"
-        android:layout_width="88dp"
+        android:layout_width="138dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="128dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/imgbtn_border"
         android:contentDescription="@null"
         app:layout_constraintEnd_toStartOf="@+id/img_btn_turnOff_pc"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tview_log"
-        app:srcCompat="@drawable/if_desktop_computer_45448" />
+        app:srcCompat="@drawable/button_turnon_128" />
 
     <ImageButton
         android:id="@+id/img_btn_turnOff_pc"
-        android:layout_width="89dp"
-        android:layout_height="65dp"
+        android:layout_width="140dp"
+        android:layout_height="128dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="24dp"
+        android:background="@drawable/imgbtn_border"
         android:contentDescription="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tview_log"
-        app:srcCompat="@drawable/if_red_29_47874" />
+        app:srcCompat="@drawable/button_trunoff_128" />
+
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="TEST"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
