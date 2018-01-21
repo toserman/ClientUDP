@@ -31,7 +31,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
             DgrmSocket = new DatagramSocket(null);
             DgrmSocket.setReuseAddress(true);
             DgrmSocket.setBroadcast(true);
-            DgrmSocket.bind(new InetSocketAddress(this.udpPort));
+            DgrmSocket.bind(new InetSocketAddress(48655));
 
             DgrmSocket.send(dp);
         } catch (Exception e) {

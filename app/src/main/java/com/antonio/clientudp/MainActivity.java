@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
-    public static String SERVER_IP = "172.22.106.8";
-    //public static String SERVER_IP = "192.168.0.106";//Raspberry
+   // public static String SERVER_IP = "172.22.106.8";
+    public static String SERVER_IP = "192.168.0.106";//Raspberry
     public static String HOME_PC_IP= "192.168.0.102"; //Home PC
 //    public static String SERVER_IP = "192.168.0.105";
 
@@ -83,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v){
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        String TEST_SERVER_IP = "172.22.106.8";
+//        String TEST_SERVER_IP = "172.22.106.8";
+        String TEST_SERVER_IP = "192.168.0.106";
         switch (v.getId()) {
             case R.id.img_btn_turnOn_pc:
                 try	{
@@ -116,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new SendUDPdata(TEST_SERVER_IP,PORT,getCommandName()).execute();
                 output_txtview.append(" Sent command:" + getCommandName() + " "
                         + date + "\n");
-//                setCommandName(TURN_OFF);
-//                new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
                 break;
         }
     }
