@@ -14,6 +14,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
     private String SendMsg;
     private DatagramSocket DgrmSocket;
     private String ipAddress;
+    private final int SEND_UDP_PORT = 48655;//
 
     public SendUDPdata(String inpIpaddress, int port, String Message) {
         this.udpPort = port;
@@ -31,7 +32,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
             DgrmSocket = new DatagramSocket(null);
             DgrmSocket.setReuseAddress(true);
             DgrmSocket.setBroadcast(true);
-            DgrmSocket.bind(new InetSocketAddress(48655));
+            DgrmSocket.bind(new InetSocketAddress(SEND_UDP_PORT));
 
             DgrmSocket.send(dp);
         } catch (Exception e) {

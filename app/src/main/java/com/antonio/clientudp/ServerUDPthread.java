@@ -68,9 +68,10 @@ public class ServerUDPthread extends Thread {
                 hd.sendMessage(msg); // ????? MAY BE NOT NEED !!!
 
                 Log.e(TAG, "RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
-                String output = new String("Request from: " + strIPaddress + ":" + port + " " + udp_data);
+                String output = "Request from: " + strIPaddress + ":" + port + " Data:" + udp_data;
+                updateOutput(output + "\n");//Update TextView in UI
 //                new ActionTask().execute(udp_data);
-                updateOutput(output + "\n");
+
             }
         } catch (SocketException e) {
             e.printStackTrace();
