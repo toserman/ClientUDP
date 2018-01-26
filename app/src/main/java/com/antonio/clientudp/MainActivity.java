@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ServerUDPthread serverThread;
     public Handler hdThread; //Handler for receiving msg from Server Thread
     static final int UDP_PORT = 48656;
+    static boolean waitResponse;
 
 
     InetAddress IPAddress;
@@ -50,12 +51,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "MY";//MainActivity.class.getName();
     public static int PORT = 48656;
-//    public static String SERVER_IP = "172.22.108.232";
+//    public static String SERVER_IP = "172.22.106.57";
+//    public static String HOME_PC_IP= SERVER_IP; //Home PC
     public static String SERVER_IP = "192.168.0.106";//Raspberry
     public static String HOME_PC_IP= "192.168.0.102"; //Home PC
+
     /* For TEST PACKET Button */
-    //String TEST_SERVER_IP = "172.22.108.232";
-    public static String TEST_SERVER_IP = "192.168.0.106";
+    String TEST_SERVER_IP = "172.22.106.57";
+   // public static String TEST_SERVER_IP = "192.168.0.106";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         turnOffPC_btn.setOnClickListener(this);
         output_txtview = findViewById(R.id.tview_log);
         output_txtview.setMovementMethod(new ScrollingMovementMethod());
+
+        waitResponse = true;
 
         //TODO: CAN BE LEAKAGE !! INVESTIGATE !!!
         hdThread = new Handler() {
@@ -90,27 +95,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.img_btn_turnOn_pc:
                 try	{
                     //TODO: Add Window for asking !!!
-
                     setCommandName(TURN_ON);
-                    new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
-                    output_txtview.append(" Sent command:" + getCommandName() + " "
-                                          + date +"\n");
+                    if(waitResponse) {
+                        new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+                        waitResponse = false;
+                        output_txtview.append(" Sent command:" + getCommandName() + " " + date + "\n");
+                    } else {
+                        output_txtview.append(" Don't send :" + getCommandName() + " WAITING RESPONSE " + date + "\n");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.img_btn_turnOff_pc:
                 setCommandName(TURN_OFF);
-                new SendUDPdata(HOME_PC_IP,PORT,getCommandName()).execute();
-                output_txtview.append(" Sent command:" + getCommandName() + " "
-                                      + date + "\n");
+                if(waitResponse) {
+                    new SendUDPdata(SERVER_IP,PORT,getCommandName()).execute();
+                    waitResponse = false;
+                    output_txtview.append(" Sent command:" + getCommandName() + " " + date + "\n");
+                } else {
+                    output_txtview.append(" Don't send :" + getCommandName() + " WAITING RESPONSE " + date + "\n");
+                }
                 break;
             case R.id.btn_test:
                 setCommandName(TEST);
+                if(waitResponse) {
+                    SendUDPdata sendUDPpkt;
+                    sendUDPpkt = new SendUDPdata(TEST_SERVER_IP, PORT, getCommandName());
+                    sendUDPpkt.execute();
+                    waitResponse = false;
+                    output_txtview.append(" Sent command: " + getCommandName() + " " + date + "\n");
+                } else {
+                    output_txtview.append(" Don't send: " + getCommandName() + " WAITING RESPONSE " + date + "\n");
+                }
 
-                new SendUDPdata(TEST_SERVER_IP,PORT,getCommandName()).execute();
-                output_txtview.append(" Sent command:" + getCommandName() + " "
-                        + date + "\n");
                 break;
         }
     }

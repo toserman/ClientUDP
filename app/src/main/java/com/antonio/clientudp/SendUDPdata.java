@@ -26,7 +26,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
         try {
             DatagramPacket dp = null;
             InetAddress IPAddress = InetAddress.getByName(ipAddress);
-            Log.d(MainActivity.TAG, "Send to " + IPAddress + " Command: " + SendMsg );
+            //Log.d(MainActivity.TAG, "Send to " + IPAddress + " Command: " + SendMsg );
             dp = new DatagramPacket(SendMsg.getBytes(), SendMsg.length(), IPAddress, udpPort);
 
             DgrmSocket = new DatagramSocket(null);
@@ -43,7 +43,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
 
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        Log.d("MY","ASYNC TASK WAS FINISHED !!! Message sent : " + this.SendMsg +""
+        Log.e("MY","ASYNC TASK WAS FINISHED !!! Message sent : " + this.SendMsg +""
                 +" result =  " + result.toString());
 
     }

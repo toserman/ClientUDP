@@ -3,6 +3,7 @@ package com.antonio.clientudp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -62,13 +63,13 @@ public class ServerUDPthread extends Thread {
 
                 String udp_data = new String(buf,0,packet.getLength());
                 Log.e(TAG,"DATA:" + udp_data);
-                        /* For sending message to MainActivity */
-                Message msg = hd.obtainMessage();
-                msg.obj = udp_data;
-                hd.sendMessage(msg); // ????? MAY BE NOT NEED !!!
 
                 Log.e(TAG, "RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
                 String output = "Request from: " + strIPaddress + ":" + port + " Data:" + udp_data;
+                if (udp_data.equals(MainActivity.TURN_ON) || udp_data.equals(MainActivity.TURN_OFF))
+                {
+                    MainActivity.waitResponse = true;
+                }
                 updateOutput(output + "\n");//Update TextView in UI
 //                new ActionTask().execute(udp_data);
 
