@@ -66,10 +66,10 @@ public class ServerUDPthread extends Thread {
 
                 Log.e(TAG, "RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
                 String output = "Request from: " + strIPaddress + ":" + port + " Data:" + udp_data;
-                if (udp_data.equals(MainActivity.TURN_ON) || udp_data.equals(MainActivity.TURN_OFF))
-                {
+//                if (udp_data.equals(MainActivity.TURN_ON) || udp_data.equals(MainActivity.TURN_OFF))
+//                {
                     MainActivity.waitResponse = true;
-                }
+               // }
                 updateOutput(output + "\n");//Update TextView in UI
 //                new ActionTask().execute(udp_data);
 
