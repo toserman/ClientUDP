@@ -25,7 +25,8 @@ import java.util.Enumeration;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity
+        implements MyTestCallBack,View.OnClickListener{
     Button test_btn;
     ImageButton turnOffPC_btn, turnOnPC_btn;
     TextView output_txtview;
@@ -33,10 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Handler hdThread; //Handler for receiving msg from Server Thread
     static final int UDP_PORT = 48656;
     static boolean waitResponse;
-
-
     InetAddress IPAddress;
     String Message ;
+
+    public void callback() {
+        Log.e("TEST","MY TEST CALL BACK !!");
+    }
 
     @Retention(SOURCE)
     @StringDef({
@@ -135,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     protected void onStart() {
-        serverThread = new ServerUDPthread(UDP_PORT,MainActivity.this,hdThread);
+        serverThread = new ServerUDPthread(this,UDP_PORT,MainActivity.this,hdThread);
         serverThread.setRunning(true);
         serverThread.start();
         String srvRunMsg = "SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n";

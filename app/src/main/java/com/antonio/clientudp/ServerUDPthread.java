@@ -25,11 +25,13 @@ public class ServerUDPthread extends Thread {
     TextView txt_output;
     Context context;
     Handler hd;
+    MyTestCallBack test;
 
-    public ServerUDPthread (int port, Context con, Handler inpHd){
+    public ServerUDPthread (MyTestCallBack check,int port, Context con, Handler inpHd){
         this.context = con;
         this.srv_port = port;
         this.hd = inpHd;
+        this.test = check;
     }
 
     public void setRunning(boolean flag) {
@@ -66,6 +68,7 @@ public class ServerUDPthread extends Thread {
 
                 Log.e(TAG, "RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
                 String output = "Request from: " + strIPaddress + ":" + port + " Data:" + udp_data;
+                test.callback(); //TESTTTTTT
 //                if (udp_data.equals(MainActivity.TURN_ON) || udp_data.equals(MainActivity.TURN_OFF))
 //                {
                     MainActivity.waitResponse = true;
