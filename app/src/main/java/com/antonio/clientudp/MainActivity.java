@@ -1,5 +1,6 @@
 package com.antonio.clientudp;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.StringDef;
@@ -121,6 +122,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_test:
+                Intent test = new Intent(this,PcActivity.class);
+                this.startActivity(test);
                 setCommandName(TEST);
                 if(waitResponse) {
                     SendUDPdata sendUDPpkt;
