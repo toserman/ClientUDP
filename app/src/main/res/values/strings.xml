@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ClientUDP</string>
     <string name="title_activity_pc">PcActivity</string>
+    <string name="test">TEST</string>
 </resources>
