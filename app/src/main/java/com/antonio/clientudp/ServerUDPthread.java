@@ -3,11 +3,11 @@ package com.antonio.clientudp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -27,12 +27,16 @@ public class ServerUDPthread extends Thread {
     Handler hd;
     MyTestCallBack test;
 
-    public ServerUDPthread (MyTestCallBack check,int port, Context con, Handler inpHd){
+    public ServerUDPthread (MyTestCallBack check,int port, Context con){
         this.context = con;
         this.srv_port = port;
-        this.hd = inpHd;
         this.test = check;
     }
+//    public ServerUDPthread (MyTestCallBack check,int port){
+//        this.context = ;
+//        this.srv_port = port;
+//        this.test = check;
+//    }
 
     public void setRunning(boolean flag) {
         this.run_flag = flag;
@@ -40,7 +44,7 @@ public class ServerUDPthread extends Thread {
 
     public void run() {
         try {
-            txt_output = ((Activity)context).findViewById(R.id.tview_log);
+            txt_output = ((Activity)context).findViewById(R.id.main_tview_log);
 
             if (socket == null) {
                 socket = new DatagramSocket(null);
@@ -68,14 +72,15 @@ public class ServerUDPthread extends Thread {
 
                 Log.e(TAG, "RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
                 String output = "Request from: " + strIPaddress + ":" + port + " Data:" + udp_data;
+                Log.e(TAG, "TEST: " + output);
                 test.callback(); //TESTTTTTT
 //                if (udp_data.equals(MainActivity.TURN_ON) || udp_data.equals(MainActivity.TURN_OFF))
 //                {
                     MainActivity.waitResponse = true;
                // }
                 updateOutput(output + "\n");//Update TextView in UI
-//                new ActionTask().execute(udp_data);
 
+//                new ActionTask().execute(udp_data);
             }
         } catch (SocketException e) {
             e.printStackTrace();
