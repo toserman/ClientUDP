@@ -79,7 +79,6 @@ public class ServerUDPthread extends Thread {
                     MainActivity.waitResponse = true;
                // }
                 updateOutput(output + "\n");//Update TextView in UI
-
 //                new ActionTask().execute(udp_data);
             }
         } catch (SocketException e) {

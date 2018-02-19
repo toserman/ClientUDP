@@ -1,5 +1,6 @@
 package com.antonio.clientudp;
 
+import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,9 +64,10 @@ public class MainActivity extends AppCompatActivity
 
         switch (v.getId()) {
             case R.id.btn_test:
-                Intent test = new Intent(this,PcActivity.class);
-
-                this.startActivity(test);
+                Log.e("MY","MainActivity Press Test Button");
+                startService(new Intent(this,ServerUDPservice.class));
+                //Intent test = new Intent(this,PcActivity.class);
+                //this.startActivity(test);
 //                setCommandName(TEST);
 //                if(waitResponse) {
 //                    SendUDPdata sendUDPpkt;
