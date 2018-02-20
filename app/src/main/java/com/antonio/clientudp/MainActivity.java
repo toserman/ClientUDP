@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity
                 Intent test = new Intent(this,ServerUDPservice.class);
                 test.putExtra("PORT",UDP_PORT);
                 startService(test);
-                //Intent test = new Intent(this,PcActivity.class);
-                //this.startActivity(test);
+                Intent test1 = new Intent(this,PcActivity.class);
+                this.startActivity(test1);
 //                setCommandName(TEST);
 //                if(waitResponse) {
 //                    SendUDPdata sendUDPpkt;
