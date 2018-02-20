@@ -65,7 +65,9 @@ public class MainActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.btn_test:
                 Log.e("MY","MainActivity Press Test Button");
-                startService(new Intent(this,ServerUDPservice.class));
+                Intent test = new Intent(this,ServerUDPservice.class);
+                test.putExtra("PORT",UDP_PORT);
+                startService(test);
                 //Intent test = new Intent(this,PcActivity.class);
                 //this.startActivity(test);
 //                setCommandName(TEST);
@@ -83,12 +85,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void onStart() {
-        serverThread = new ServerUDPthread(this,UDP_PORT,MainActivity.this);
-        serverThread.setRunning(true);
-        serverThread.start();
-        Log.d(TAG,"SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n");
-        String srvRunMsg = "SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n";
-        main_txtview.setText(srvRunMsg);
+//        serverThread = new ServerUDPthread(this,UDP_PORT,MainActivity.this);
+//        serverThread.setRunning(true);
+//        serverThread.start();
+//        Log.d(TAG,"SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n");
+//        String srvRunMsg = "SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n";
+//        main_txtview.setText(srvRunMsg);
         super.onStart();
     }
     @Override
