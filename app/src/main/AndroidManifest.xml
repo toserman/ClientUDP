@@ -24,6 +24,12 @@
         <service android:name=".ServerUDPservice"
             android:enabled="true"
             android:exported="true"></service>
+        <receiver
+            android:name=".TestLocalBroadCastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.SERVICE_DATA" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

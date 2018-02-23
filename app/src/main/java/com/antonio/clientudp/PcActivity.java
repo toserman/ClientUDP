@@ -56,6 +56,7 @@ public class PcActivity extends AppCompatActivity
         output_txtview = findViewById(R.id.pc_tview_log);
         output_txtview.setMovementMethod(new ScrollingMovementMethod());
         waitResponse = true;
+        Log.e("TAG", "PcActivity onCreate" );
     }
 
     @Override

@@ -1,7 +1,11 @@
 package com.antonio.clientudp;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     String TEST_SERVER_IP = "172.22.106.57";
    // public static String TEST_SERVER_IP = "192.168.0.106";
 
+    private TestLocalBroadCastReceiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         main_txtview.setMovementMethod(new ScrollingMovementMethod());
 
         waitResponse = true;
+        mReceiver = new TestLocalBroadCastReceiver();
 
     }
 
@@ -70,6 +77,7 @@ public class MainActivity extends AppCompatActivity
                 startService(test);
                 Intent test1 = new Intent(this,PcActivity.class);
                 this.startActivity(test1);
+
 //                setCommandName(TEST);
 //                if(waitResponse) {
 //                    SendUDPdata sendUDPpkt;
@@ -91,23 +99,44 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG,"SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n");
 //        String srvRunMsg = "SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n";
 //        main_txtview.setText(srvRunMsg);
+        //TODO: Investigate : Register local broadcast Here onStart()
+        // register local broadcast
+        Log.e("TAG", "STATE onStart" );
+        IntentFilter filter = new IntentFilter(ServerUDPservice.MAINACTIVITY);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
         super.onStart();
     }
+//    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            Log.e("TAG", "onReceive() Data from Service:");
+//            String text = intent.getStringExtra("SERVICE_DATA");
+//            Log.e("TAG", "onReceive() Data from Service:" + text );
+//           // mDateText.setText(date);
+//        }
+//    };
     @Override
     protected void onStop() {
         if(serverThread != null){
             serverThread.setRunning(false);
             serverThread = null;
         }
+        //TODO: Investigate : unregister local broadcast
         super.onStop();
     }
     protected void onPause() {
         Log.e("TAG", "STATE onPause" );
+        // unregister local broadcast
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+
         super.onPause();
     }
     @Override
     protected void onResume() {
         Log.e("TAG", "STATE onResume" );
+//        // register local broadcast
+//        IntentFilter filter = new IntentFilter(ServerUDPservice.MAINACTIVITY);
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
         super.onResume();
     }
 

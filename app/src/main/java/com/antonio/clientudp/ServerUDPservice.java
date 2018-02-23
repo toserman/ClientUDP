@@ -5,6 +5,7 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.ViewDebug;
 
@@ -29,10 +30,12 @@ public class ServerUDPservice extends IntentService {
     private final int UDP_SIZE = 65507;//Max size practical size
     DatagramSocket socket;
     volatile boolean run_flag; //TODO:May be not need
+    public static final String MAINACTIVITY = "MainActivity";
 
     public ServerUDPservice() {
         super("ServerUDPservice");
     }
+
     @Override
     //NO NEED FOR IntentService()
 //    public int onStartCommand(Intent intent, int flags,int startId)
@@ -43,12 +46,13 @@ public class ServerUDPservice extends IntentService {
 //    }
 
     protected void onHandleIntent(Intent intent) {
-        Log.e("MY","ServerUDPservice onHandleIntent()");
-        //testLoop();
+        Log.e("MY", "ServerUDPservice onHandleIntent()");
+        sendLocalBroadcastData();//JUST FOR TEST
+        testLoop();
         if (intent != null) {
-            this.srv_port = intent.getIntExtra("PORT",-1);
-            runUDPserver();
-            Log.e("MY","ServerUDPservice onHandleIntent()" + "PORT = " + Integer.toString(srv_port));
+            this.srv_port = intent.getIntExtra("PORT", -1);
+            //runUDPserver();
+            Log.e("MY", "ServerUDPservice onHandleIntent()" + "PORT = " + Integer.toString(srv_port));
             // Do whatever you need to do here.
         }
     }
@@ -62,23 +66,23 @@ public class ServerUDPservice extends IntentService {
                 socket.setBroadcast(true);
                 socket.bind(new InetSocketAddress(this.srv_port));
             }
-            Log.e(TAG, "RUN FLAG = " + Boolean.toString(run_flag) + " PORT: " +srv_port);
-            while(this.run_flag) {
+            Log.e(TAG, "RUN FLAG = " + Boolean.toString(run_flag) + " PORT: " + srv_port);
+            while (this.run_flag) {
                 byte[] buf = new byte[UDP_SIZE];
-                Log.e(TAG,"WAIT PACKET!!!!");
+                Log.e(TAG, "WAIT PACKET!!!!");
                 // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet); //this code block the program flow
 
-                Log.e(TAG,"RECEIVED PACKET!!!!");
+                Log.e(TAG, "RECEIVED PACKET!!!!");
 
                 InetAddress address = packet.getAddress();
                 String strIPaddress = address.getHostAddress();//without '/' at the start
 
                 int port = packet.getPort();
 
-                String udp_data = new String(buf,0,packet.getLength());
-                Log.e(TAG,"DATA:" + udp_data);
+                String udp_data = new String(buf, 0, packet.getLength());
+                Log.e(TAG, "DATA:" + udp_data);
 
                 Log.e(TAG, "RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
                 String output = "Request from: " + strIPaddress + ":" + port + " Data:" + udp_data;
@@ -92,12 +96,13 @@ public class ServerUDPservice extends IntentService {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if(socket != null){
+            if (socket != null) {
                 socket.close();
                 Log.e(TAG, "socket.close()");
             }
         }
     }
+
     public void testLoop() {
         new Thread(new Runnable() {
             @Override
@@ -109,11 +114,22 @@ public class ServerUDPservice extends IntentService {
                         e.printStackTrace();
                     }
 //                    Toast.makeText(this,"SECOND:" + Integer.toString(i),Toast.LENGTH_LONG).show();
-                    Log.e("MY","SECOND : " + Integer.toString(i));
+                    Log.e("MY", "SECOND : " + Integer.toString(i));
+                    sendLocalBroadcastData();//JUST FOR TEST
                 }
+
             }
         }).start();
     }
+
+    public void sendLocalBroadcastData() {
+        Intent intent = new Intent(MAINACTIVITY);
+        intent.putExtra("SERVICE_DATA","HelloActivity");
+        Log.d(ServerUDPservice.class.getSimpleName(), "Sending broadcast to Activity !!!");
+        // send local broadcast
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
     @Override
     public void onCreate()
     {
