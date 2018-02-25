@@ -50,4 +50,39 @@
         app:layout_constraintTop_toBottomOf="@+id/pc_tview_log"
         app:srcCompat="@drawable/button_trunoff_128" />
 
+    <Button
+        android:id="@+id/second_test_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="96dp"
+        android:text="TEST"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_btn_turnOff_pc" />
+
+    <Switch
+        android:id="@+id/pc_switch"
+        android:layout_width="249dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="172dp"
+        android:showText="true"
+        android:splitTrack="true"
+        android:text="PC"
+        android:textColor="@android:color/holo_green_dark"
+        android:textOff="off"
+        android:textOn="on"
+        android:thumbTextPadding="100px"
+        android:thumbTint="@android:color/holo_green_dark"
+        android:background="@android:color/holo_green_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.747"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pc_tview_log" />
+
 </android.support.constraint.ConstraintLayout>

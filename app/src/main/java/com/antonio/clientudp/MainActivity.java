@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity
     String TEST_SERVER_IP = "172.22.106.57";
    // public static String TEST_SERVER_IP = "192.168.0.106";
 
-    private TestLocalBroadCastReceiver mReceiver;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +59,6 @@ public class MainActivity extends AppCompatActivity
         main_txtview.setMovementMethod(new ScrollingMovementMethod());
 
         waitResponse = true;
-        mReceiver = new TestLocalBroadCastReceiver();
-
     }
 
     @Override
@@ -72,9 +68,6 @@ public class MainActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.btn_test:
                 Log.e("MY","MainActivity Press Test Button");
-                Intent test = new Intent(this,ServerUDPservice.class);
-                test.putExtra("PORT",UDP_PORT);
-                startService(test);
                 Intent test1 = new Intent(this,PcActivity.class);
                 this.startActivity(test1);
 
@@ -99,12 +92,9 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG,"SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n");
 //        String srvRunMsg = "SERVER STARTED IP:" + getIpAddress() + " PORT: " + UDP_PORT + "\n";
 //        main_txtview.setText(srvRunMsg);
-        //TODO: Investigate : Register local broadcast Here onStart()
-        // register local broadcast
+
         Log.e("TAG", "STATE onStart" );
-        IntentFilter filter = new IntentFilter(ServerUDPservice.MAINACTIVITY);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
-        super.onStart();
+          super.onStart();
     }
 //    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 //        @Override
@@ -121,14 +111,12 @@ public class MainActivity extends AppCompatActivity
             serverThread.setRunning(false);
             serverThread = null;
         }
-        //TODO: Investigate : unregister local broadcast
+
         super.onStop();
     }
     protected void onPause() {
         Log.e("TAG", "STATE onPause" );
         // unregister local broadcast
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
-
         super.onPause();
     }
     @Override

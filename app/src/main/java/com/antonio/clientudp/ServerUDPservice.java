@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
-import android.view.ViewDebug;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -15,6 +18,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.ContentValues.TAG;
@@ -25,34 +29,49 @@ import static java.lang.Boolean.TRUE;
  */
 
 public class ServerUDPservice extends IntentService {
-
     private int srv_port;
+    final static String TAG = "ServerUDPservice";
     private final int UDP_SIZE = 65507;//Max size practical size
     DatagramSocket socket;
     volatile boolean run_flag; //TODO:May be not need
     public static final String MAINACTIVITY = "MainActivity";
+    /* Data for Messenger interface */
+    ArrayList<Messenger> mClients = new ArrayList<Messenger>();
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+    static final int MSG_REGISTER_CLIENT = 1;
+    static final int MSG_UNREGISTER_CLIENT = 2;
+    static final int MSG_SET_INT_VALUE = 3;
+    static final int MSG_SET_STRING_VALUE = 4;
 
     public ServerUDPservice() {
         super("ServerUDPservice");
     }
 
-    @Override
-    //NO NEED FOR IntentService()
-//    public int onStartCommand(Intent intent, int flags,int startId)
-//    {
-//        Log.e("MY","ServerUDPservice onStartCommand()");
-//        testLoop();
-//        return super.onStartCommand(intent, flags, startId);
-//    }
+    class IncomingHandler extends Handler {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_REGISTER_CLIENT:
+                    mClients.add(msg.replyTo);
+                    Log.e(TAG,"handleMessage() MSG_REGISTER_CLIENT");
+                    break;
+                case MSG_UNREGISTER_CLIENT:
+                    Log.e(TAG,"handleMessage() MSG_UNREGISTER_CLIENT");
+                    mClients.remove(msg.replyTo);
+                    break;
+                default:
+                    super.handleMessage(msg);
+                    break;
+            }
+        }
+    }
 
     protected void onHandleIntent(Intent intent) {
-        Log.e("MY", "ServerUDPservice onHandleIntent()");
-        sendLocalBroadcastData();//JUST FOR TEST
-        testLoop();
+        Log.e(TAG,"onHandleIntent()");
+       // testLoop();
         if (intent != null) {
             this.srv_port = intent.getIntExtra("PORT", -1);
-            //runUDPserver();
-            Log.e("MY", "ServerUDPservice onHandleIntent()" + "PORT = " + Integer.toString(srv_port));
+            runUDPserver();
+            Log.e(TAG, " onHandleIntent()" + "PORT = " + Integer.toString(srv_port));
             // Do whatever you need to do here.
         }
     }
@@ -66,30 +85,22 @@ public class ServerUDPservice extends IntentService {
                 socket.setBroadcast(true);
                 socket.bind(new InetSocketAddress(this.srv_port));
             }
-            Log.e(TAG, "RUN FLAG = " + Boolean.toString(run_flag) + " PORT: " + srv_port);
+            Log.e(TAG,"RUN FLAG = " + Boolean.toString(run_flag) + " PORT: " + srv_port);
             while (this.run_flag) {
                 byte[] buf = new byte[UDP_SIZE];
-                Log.e(TAG, "WAIT PACKET!!!!");
+                Log.e(TAG,"WAIT PACKET!!!!");
                 // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet); //this code block the program flow
 
-                Log.e(TAG, "RECEIVED PACKET!!!!");
-
                 InetAddress address = packet.getAddress();
                 String strIPaddress = address.getHostAddress();//without '/' at the start
-
                 int port = packet.getPort();
-
                 String udp_data = new String(buf, 0, packet.getLength());
-                Log.e(TAG, "DATA:" + udp_data);
-
-                Log.e(TAG, "RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
-                String output = "Request from: " + strIPaddress + ":" + port + " Data:" + udp_data;
-                Log.e(TAG, "TEST: " + output);
-//                MainActivity.waitResponse = true;
-                // }
-                //updateOutput(output + "\n");//Update TextView in UI
+                Log.e(TAG,"DATA:" + udp_data);
+                Log.e(TAG,"RECEIVE PACKET : " + strIPaddress + ":" + port + " " + udp_data);
+                String output = "Server: " + strIPaddress + ":" + port + " Msg:" + udp_data;
+                sendMessageToActivity(output);
             }
         } catch (SocketException e) {
             e.printStackTrace();
@@ -98,7 +109,23 @@ public class ServerUDPservice extends IntentService {
         } finally {
             if (socket != null) {
                 socket.close();
-                Log.e(TAG, "socket.close()");
+                Log.e(TAG,"socket.close()");
+            }
+        }
+    }
+
+    private void sendMessageToActivity(final String strRcv) {
+        //Send String data
+        for (int i = mClients.size()-1; i >=0; i--) {
+            try {
+                Bundle b = new Bundle();
+                b.putString("strFromService", strRcv);
+                Message msg = Message.obtain(null, MSG_SET_STRING_VALUE);
+                msg.setData(b);
+                mClients.get(i).send(msg);
+                Log.e(TAG,"sendMessageToActivity() to client i = " + Integer.toString(i));
+            } catch (RemoteException e) {
+                mClients.remove(0);
             }
         }
     }
@@ -113,40 +140,46 @@ public class ServerUDPservice extends IntentService {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-//                    Toast.makeText(this,"SECOND:" + Integer.toString(i),Toast.LENGTH_LONG).show();
-                    Log.e("MY", "SECOND : " + Integer.toString(i));
-                    sendLocalBroadcastData();//JUST FOR TEST
+                    Log.e(TAG,"SECOND : " + Integer.toString(i));
                 }
-
             }
         }).start();
-    }
-
-    public void sendLocalBroadcastData() {
-        Intent intent = new Intent(MAINACTIVITY);
-        intent.putExtra("SERVICE_DATA","HelloActivity");
-        Log.d(ServerUDPservice.class.getSimpleName(), "Sending broadcast to Activity !!!");
-        // send local broadcast
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override
     public void onCreate()
     {
-        Log.e("MY","ServerUDPservice OnCreate()");
+        Log.e(TAG,"OnCreate()");
         super.onCreate();
     }
 
     @Override
     public void onDestroy()
     {
-        Log.e("MY","ServerUDPservice OnDestroy()");
+        Log.e(TAG,"OnDestroy()");
         super.onDestroy();
     }
 
-
     @Override
     public IBinder onBind(Intent intent) {
-        throw new UnsupportedOperationException("Need to implement !!!");
+        Log.e(TAG,"OnBind()");
+        //return mBinder;
+        return mMessenger.getBinder();
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        Log.e(TAG,"OnRebind()");
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.e(TAG,"OnUnbind()");
+        return super.onUnbind(intent);
+    }
+
+    public int getServiceValue() {
+        return 9999;
     }
 }

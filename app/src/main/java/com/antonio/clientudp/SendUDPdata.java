@@ -16,6 +16,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
     private String ipAddress;
     private final int SEND_UDP_PORT = 48655;//
 
+
     public SendUDPdata(String inpIpaddress, int port, String Message) {
         this.udpPort = port;
         this.SendMsg = Message;
@@ -26,7 +27,7 @@ public class SendUDPdata extends AsyncTask<Void, Void, Integer> {
         try {
             DatagramPacket dp = null;
             InetAddress IPAddress = InetAddress.getByName(ipAddress);
-            //Log.d(MainActivity.TAG, "Send to " + IPAddress + " Command: " + SendMsg );
+            Log.d(MainActivity.TAG, "Send to " + IPAddress + " Command: " + SendMsg );
             dp = new DatagramPacket(SendMsg.getBytes(), SendMsg.length(), IPAddress, udpPort);
 
             DgrmSocket = new DatagramSocket(null);
