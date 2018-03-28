@@ -164,6 +164,7 @@ public class PcActivity extends AppCompatActivity
             Log.e(TAG,"onServiceDisconnected()" );
             flagBound = false;
             msgService = null;
+
         }
     };
     class IncomingHandler extends Handler {
