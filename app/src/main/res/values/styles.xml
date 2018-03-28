@@ -17,4 +17,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Switch_style" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/holo_green_dark</item>
+        <item name="colorSwitchThumbNormal">@android:color/holo_red_dark</item>
+        <item name="trackTint">@color/colorPrimary</item>
+    </style>
+
 </resources>

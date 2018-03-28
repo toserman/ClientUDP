@@ -17,6 +17,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -25,9 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
+import android.support.v7.widget.SwitchCompat;
 
 public class PcActivity extends AppCompatActivity
-        implements View.OnClickListener{
+        implements View.OnClickListener,CompoundButton.OnCheckedChangeListener {
 
     ImageButton turnOffPC_btn, turnOnPC_btn;
     Button test_btn;
@@ -37,6 +39,7 @@ public class PcActivity extends AppCompatActivity
     boolean flagBound = false; //
     Messenger msgService = null;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
+
 
     @Retention(SOURCE)
     @StringDef({
@@ -76,6 +79,10 @@ public class PcActivity extends AppCompatActivity
         output_txtview.setMovementMethod(new ScrollingMovementMethod());
         waitResponse = true;
         Log.e(TAG,"onCreate" );
+
+        SwitchCompat switchCompat = findViewById(R.id.switch_compat);
+        switchCompat.setSwitchPadding(200);
+        switchCompat.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -127,6 +134,14 @@ public class PcActivity extends AppCompatActivity
 //                            + Integer.toString(check) );
                 }
         }
+    }
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.switch_compat:
+                Log.i("switch_compat", isChecked + "");
+                break;
+        }
+
     }
     private ServiceConnection sConnection = new ServiceConnection() {
         @Override
