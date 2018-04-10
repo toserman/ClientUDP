@@ -35,6 +35,7 @@ public class PcActivity extends AppCompatActivity
     Button test_btn;
     TextView output_txtview;
     String Message;
+    SwitchCompat switchCompat;
     static boolean waitResponse;
     boolean flagBound = false; //
     Messenger msgService = null;
@@ -80,9 +81,10 @@ public class PcActivity extends AppCompatActivity
         waitResponse = true;
         Log.e(TAG,"onCreate" );
 
-        SwitchCompat switchCompat = findViewById(R.id.switch_compat);
+        switchCompat = findViewById(R.id.switch_compat);
         switchCompat.setSwitchPadding(200);
         switchCompat.setOnCheckedChangeListener(this);
+        switchCompat.setChecked(true);
     }
 
     @Override
