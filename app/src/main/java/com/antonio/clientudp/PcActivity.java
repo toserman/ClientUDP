@@ -41,16 +41,17 @@ public class PcActivity extends AppCompatActivity
     Messenger msgService = null;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
-
     @Retention(SOURCE)
     @StringDef({
             TURN_ON,
             TURN_OFF,
+            CHECK_CONNECTION,
             TEST
     })
     public @interface CommandName {};
     public static final String TURN_ON = "TurnOn";
     public static final String TURN_OFF = "TurnOff";
+    public static final String CHECK_CONNECTION = "CheckConnection";
     public static final String TEST = "TestPacket";
     public static final String TAG = "PcActivity";//MainActivity.class.getName();
     public static int SERVER_DST_PORT = 48656;
@@ -85,6 +86,7 @@ public class PcActivity extends AppCompatActivity
         switchCompat.setSwitchPadding(200);
         switchCompat.setOnCheckedChangeListener(this);
         switchCompat.setChecked(true);
+        checkAvailability();
     }
 
     @Override
@@ -137,6 +139,20 @@ public class PcActivity extends AppCompatActivity
                 }
         }
     }
+
+    public void checkAvailability() {
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        setCommandName(CHECK_CONNECTION);
+        if(waitResponse) {
+            new SendUDPdata(SERVER_IP,SERVER_DST_PORT,getCommandName()).execute();
+            waitResponse = false;
+            output_txtview.append(" Sent command:" + getCommandName() + " " + date + "\n");
+        } else {
+            output_txtview.append(" Don't send :" + getCommandName() + " WAITING RESPONSE " + date + "\n");
+        }
+    }
+
+
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.switch_compat:
