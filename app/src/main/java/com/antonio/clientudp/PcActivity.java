@@ -37,6 +37,7 @@ public class PcActivity extends AppCompatActivity
     String Message;
     SwitchCompat switchCompat;
     static boolean waitResponse;
+    static boolean initState;
     boolean flagBound = false; //
     Messenger msgService = null;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
@@ -80,12 +81,13 @@ public class PcActivity extends AppCompatActivity
         output_txtview = findViewById(R.id.pc_tview_log);
         output_txtview.setMovementMethod(new ScrollingMovementMethod());
         waitResponse = true;
+        initState = true;
         Log.e(TAG,"onCreate" );
 
         switchCompat = findViewById(R.id.switch_compat);
         switchCompat.setSwitchPadding(200);
         switchCompat.setOnCheckedChangeListener(this);
-        switchCompat.setChecked(true);
+        //switchCompat.setChecked(true);
         checkAvailability();
     }
 
@@ -156,8 +158,19 @@ public class PcActivity extends AppCompatActivity
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.switch_compat:
-                Log.i("switch_compat", isChecked + "");
-                break;
+                Log.e("switch_compat", isChecked + "");
+if (!initState) {
+    if (isChecked) {
+        Log.e("switch_compat", isChecked + "");
+                    setCommandName(TURN_ON);
+                    new SendUDPdata(SERVER_IP, SERVER_DST_PORT, getCommandName()).execute();
+    } else {
+        Log.e("switch_compat", isChecked + "");
+                    setCommandName(TURN_OFF);
+                    new SendUDPdata(SERVER_IP, SERVER_DST_PORT, getCommandName()).execute();
+    }
+}
+               break;
         }
 
     }
@@ -193,6 +206,29 @@ public class PcActivity extends AppCompatActivity
                     String strTest = msg.getData().getString("strFromService");
                     Log.e(TAG,"Incoming Message FROM Service " +
                             "\n" + strTest);
+                    Log.e(TAG,"handleMessage() strTest = " + strTest);
+                    //TEST
+                    String[] newstr = strTest.split("Msg:");
+                    String test = newstr[1];
+                    Log.e(TAG,"handleMessage() test = " + test);
+                    //TODO: Crash when receive just TurnOn or TurnOff
+                    if (!test.equals(TURN_ON) && !test.equals(TURN_OFF)) {
+                        String[] endstr = test.split(":");
+                        String check0 = endstr[0];
+                        String check1 = endstr[1];
+                        Log.e(TAG, "handleMessage() test = " + test + " check0 = " + check0 +
+                                " check1 = " + check1);
+                        if (check0.equals(CHECK_CONNECTION)) {
+                            if (check1.equals(TURN_ON)) {
+                                switchCompat.setChecked(true);
+                                initState = false;
+                            }
+                            if (check1.equals(TURN_OFF)) {
+                                switchCompat.setChecked(false);
+                                initState = false;
+                            }
+                        }
+                    }
                     output_txtview.append(strTest);
                     waitResponse = true;
                 default:
