@@ -145,6 +145,7 @@ public class PcActivity extends AppCompatActivity
     public void checkAvailability() {
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         setCommandName(CHECK_CONNECTION);
+        Log.e(TAG,"checkAvailability()" + " waitResponse = " + Boolean.toString(waitResponse) );
         if(waitResponse) {
             new SendUDPdata(SERVER_IP,SERVER_DST_PORT,getCommandName()).execute();
             waitResponse = false;
@@ -156,20 +157,24 @@ public class PcActivity extends AppCompatActivity
 
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         switch (buttonView.getId()) {
             case R.id.switch_compat:
-                Log.e("switch_compat", isChecked + "");
-if (!initState) {
-    if (isChecked) {
-        Log.e("switch_compat", isChecked + "");
-                    setCommandName(TURN_ON);
-                    new SendUDPdata(SERVER_IP, SERVER_DST_PORT, getCommandName()).execute();
-    } else {
-        Log.e("switch_compat", isChecked + "");
-                    setCommandName(TURN_OFF);
-                    new SendUDPdata(SERVER_IP, SERVER_DST_PORT, getCommandName()).execute();
-    }
-}
+                Log.e("switch_compat", isChecked + "" + " initState = " + Boolean.toString(initState));
+                if (!initState) {
+                    if (isChecked) {
+                        //Log.e("switch_compat", isChecked + "");
+                        setCommandName(TURN_ON);
+                        new SendUDPdata(SERVER_IP, SERVER_DST_PORT, getCommandName()).execute();
+
+                    } else {
+                       // Log.e("switch_compat", isChecked + "");
+                        setCommandName(TURN_OFF);
+                        new SendUDPdata(SERVER_IP, SERVER_DST_PORT, getCommandName()).execute();
+                    }
+                    output_txtview.append(" Sent command:" + getCommandName() + " " + date + "\n");
+                }
+
                break;
         }
 
@@ -213,6 +218,7 @@ if (!initState) {
                     Log.e(TAG,"handleMessage() test = " + test);
                     //TODO: Crash when receive just TurnOn or TurnOff
                     if (!test.equals(TURN_ON) && !test.equals(TURN_OFF)) {
+                        Log.e(TAG, "handleMessage() point ");
                         String[] endstr = test.split(":");
                         String check0 = endstr[0];
                         String check1 = endstr[1];
@@ -229,8 +235,9 @@ if (!initState) {
                             }
                         }
                     }
-                    output_txtview.append(strTest);
-                    waitResponse = true;
+                    Log.e(TAG, "handleMessage() Before Send TextView strTest = " + strTest);
+                    output_txtview.append(strTest + "\n");
+                    //waitResponse = true;
                 default:
                     super.handleMessage(msg);
             }
@@ -240,10 +247,11 @@ if (!initState) {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(TAG,"onStart()" );
+        Log.e(TAG,"********** onStart() ***********" );
         //Bind to serverService
         Intent intent = new Intent(this,ServerUDPservice.class);
         bindService(intent,sConnection,Context.BIND_AUTO_CREATE);
+       // checkAvailability();
     }
     @Override
     protected void onStop() {
