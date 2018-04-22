@@ -207,6 +207,9 @@ public class PcActivity extends AppCompatActivity
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case ServerUDPservice.MSG_CHECK_CONNECTION:
+                    Log.e(TAG,"Incoming Message FROM Service MSG_CHECK_CONNECTION " + CHECK_CONNECTION);
+                    break;
                 case ServerUDPservice.MSG_SET_STRING_VALUE:
                     String strTest = msg.getData().getString("strFromService");
                     Log.e(TAG,"Incoming Message FROM Service " +

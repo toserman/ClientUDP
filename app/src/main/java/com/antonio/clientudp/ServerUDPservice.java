@@ -42,6 +42,7 @@ public class ServerUDPservice extends IntentService {
     static final int MSG_UNREGISTER_CLIENT = 2;
     static final int MSG_SET_INT_VALUE = 3;
     static final int MSG_SET_STRING_VALUE = 4;
+    static final int MSG_CHECK_CONNECTION = 5;
 
     public ServerUDPservice() {
         super("ServerUDPservice");
@@ -124,6 +125,16 @@ public class ServerUDPservice extends IntentService {
                 msg.setData(b);
                 mClients.get(i).send(msg);
                 Log.e(TAG,"sendMessageToActivity() to client i = " + Integer.toString(i));
+
+                if (strRcv.indexOf(PcActivity.CHECK_CONNECTION) > -1) {
+                    Log.e(TAG,"sendMessageToActivity() string contains " + PcActivity.CHECK_CONNECTION);
+                    Message msg1 = Message.obtain(null, MSG_CHECK_CONNECTION);
+                    msg.setData(b);
+                    mClients.get(i).send(msg1);
+                    Log.e(TAG,"sendMessageToActivity() to MSG_CHECK_CONNECTION ");
+                }
+
+
             } catch (RemoteException e) {
                 mClients.remove(0);
             }
