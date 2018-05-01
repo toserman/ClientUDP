@@ -209,40 +209,36 @@ public class PcActivity extends AppCompatActivity
             switch (msg.what) {
                 case ServerUDPservice.MSG_CHECK_CONNECTION:
                     Log.e(TAG,"Incoming Message FROM Service MSG_CHECK_CONNECTION " + CHECK_CONNECTION);
+                    String strServiceData = msg.getData().getString("strFromService");
+                    checkHostState(strServiceData,switchCompat);
+                    Log.e(TAG, "handleMessage() Before Send TextView strTest = " + strServiceData);
+                    output_txtview.append(strServiceData + "\n");
                     break;
                 case ServerUDPservice.MSG_SET_STRING_VALUE:
-                    String strTest = msg.getData().getString("strFromService");
-                    Log.e(TAG,"Incoming Message FROM Service " +
-                            "\n" + strTest);
-                    Log.e(TAG,"handleMessage() strTest = " + strTest);
-                    //TEST
-                    String[] newstr = strTest.split("Msg:");
-                    String test = newstr[1];
-                    Log.e(TAG,"handleMessage() test = " + test);
-                    //TODO: Crash when receive just TurnOn or TurnOff
-                    if (!test.equals(TURN_ON) && !test.equals(TURN_OFF)) {
-                        Log.e(TAG, "handleMessage() point ");
-                        String[] endstr = test.split(":");
-                        String check0 = endstr[0];
-                        String check1 = endstr[1];
-                        Log.e(TAG, "handleMessage() test = " + test + " check0 = " + check0 +
-                                " check1 = " + check1);
-                        if (check0.equals(CHECK_CONNECTION)) {
-                            if (check1.equals(TURN_ON)) {
-                                switchCompat.setChecked(true);
-                                initState = false;
-                            }
-                            if (check1.equals(TURN_OFF)) {
-                                switchCompat.setChecked(false);
-                                initState = false;
-                            }
-                        }
-                    }
-                    Log.e(TAG, "handleMessage() Before Send TextView strTest = " + strTest);
-                    output_txtview.append(strTest + "\n");
-                    //waitResponse = true;
+                    //FOR NEW FUCTIONALITY
                 default:
                     super.handleMessage(msg);
+            }
+        }
+    }
+    private void checkHostState(final String strInput, SwitchCompat inpSwitch) {
+//        String strTest = msg.getData().getString("strFromService");
+        //Example: Server: 192.168.0.106:48655 Msg:CheckConnection:TurnOn
+        Log.e(TAG, "Incoming Message FROM Service " + "\n" + strInput);
+        Log.e(TAG, "checkHostState() strInput = " + strInput);
+        String[] newstr = strInput.split("Msg:");
+
+        if (!newstr[1].equals(TURN_ON) && !newstr[1].equals(TURN_OFF)) {
+            //Example: CheckConnection:TurnOn
+            String[] endstr = newstr[1].split(":");
+            Log.e(TAG, "checkHostState() endstr[0] = " + endstr[0] + " endstr[1] = " + endstr[1]);
+            if (endstr[1].equals(TURN_ON)) {
+                    inpSwitch.setChecked(true);
+                    initState = false;
+            }
+            if (endstr[1].equals(TURN_OFF)) {
+                    inpSwitch.setChecked(false);
+                    initState = false;
             }
         }
     }
