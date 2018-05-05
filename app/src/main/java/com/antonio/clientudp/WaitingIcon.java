@@ -2,6 +2,7 @@ package com.antonio.clientudp;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -20,10 +21,12 @@ public class WaitingIcon extends Dialog {
 
         //((TextView)dialog.findViewById(R.style.NewDialog)).setTypeface(Typeface.createFromAsset(context.getAssets(),"fonts/FONT"));
         /*For icon */
-        LayoutParams layoutparam = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        LayoutParams layoutparam = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         //  layoutparam.height = 80;
         /* Add icon*/
-        dialog.addContentView(new ProgressBar(context),layoutparam);
+        ProgressBar pb = new ProgressBar(context);
+        pb.getIndeterminateDrawable().setColorFilter(0xd3d3d3ff, PorterDuff.Mode.MULTIPLY);
+        dialog.addContentView(pb,layoutparam);
         dialog.show();
 
         return dialog;
