@@ -121,13 +121,17 @@ public class ServerUDPservice extends IntentService {
             try {
                 Bundle b = new Bundle();
                 b.putString("strFromService", strRcv);
+                Message msg;
                 if (strRcv.indexOf(PcActivity.CHECK_CONNECTION) > -1) {
                     Log.e(TAG,"sendMessageToActivity() string contains " + PcActivity.CHECK_CONNECTION);
-                    Message msg = Message.obtain(null, MSG_CHECK_CONNECTION);
-                    msg.setData(b);
-                    mClients.get(i).send(msg);
+                    msg = Message.obtain(null, MSG_CHECK_CONNECTION);
                     Log.e(TAG,"sendMessageToActivity() to MSG_CHECK_CONNECTION ");
+                } else {
+                    msg = Message.obtain(null, MSG_SET_STRING_VALUE);
+                    Log.e(TAG,"sendMessageToActivity() to MSG_SET_STRING_VALUE " + strRcv);
                 }
+                msg.setData(b);
+                mClients.get(i).send(msg);
             } catch (RemoteException e) {
                 mClients.remove(0);
             }

@@ -41,6 +41,7 @@ public class PcActivity extends AppCompatActivity
     boolean flagBound = false; //
     Messenger msgService = null;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
+    WaitingIcon waiting_icon,temp_waiting_icon;
 
     @Retention(SOURCE)
     @StringDef({
@@ -88,6 +89,8 @@ public class PcActivity extends AppCompatActivity
         switchCompat.setSwitchPadding(200);
         switchCompat.setOnCheckedChangeListener(this);
         //switchCompat.setChecked(true);
+        waiting_icon = new WaitingIcon(this);
+        temp_waiting_icon = new WaitingIcon(this);
         checkAvailability();
     }
 
@@ -147,6 +150,7 @@ public class PcActivity extends AppCompatActivity
         setCommandName(CHECK_CONNECTION);
         Log.e(TAG,"checkAvailability()" + " waitResponse = " + Boolean.toString(waitResponse) );
         if(waitResponse) {
+            temp_waiting_icon = waiting_icon.show(this,"Please Wait ...",true,false);
             new SendUDPdata(SERVER_IP,SERVER_DST_PORT,getCommandName()).execute();
             waitResponse = false;
             output_txtview.append(" Sent command:" + getCommandName() + " " + date + "\n");
@@ -206,19 +210,22 @@ public class PcActivity extends AppCompatActivity
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            String strServiceData = msg.getData().getString("strFromService");
             switch (msg.what) {
                 case ServerUDPservice.MSG_CHECK_CONNECTION:
+                    temp_waiting_icon.cancel();
                     Log.e(TAG,"Incoming Message FROM Service MSG_CHECK_CONNECTION " + CHECK_CONNECTION);
-                    String strServiceData = msg.getData().getString("strFromService");
                     checkHostState(strServiceData,switchCompat);
                     Log.e(TAG, "handleMessage() Before Send TextView strTest = " + strServiceData);
-                    output_txtview.append(strServiceData + "\n");
                     break;
                 case ServerUDPservice.MSG_SET_STRING_VALUE:
                     //FOR NEW FUCTIONALITY
+                    Log.e(TAG,"Incoming Message FROM Service MSG_SET_STRING_VALUE: " + strServiceData);
+                    break;
                 default:
                     super.handleMessage(msg);
             }
+            output_txtview.append(strServiceData + "\n");
         }
     }
     private void checkHostState(final String strInput, SwitchCompat inpSwitch) {
