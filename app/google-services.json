@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "475889931779",
+    "firebase_url": "https://sweethome-2018.firebaseio.com",
+    "project_id": "sweethome-2018",
+    "storage_bucket": "sweethome-2018.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475889931779:android:9145a1a571421894",
+        "android_client_info": {
+          "package_name": "com.antonio.clientudp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475889931779-dd31c1dnhsns0micsh7f6un59gdefhvg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.antonio.clientudp",
+            "certificate_hash": "fa1ca09f1e9d732e55be69e4fbd0718626b2258e"
+          }
+        },
+        {
+          "client_id": "475889931779-q60kdgcp8fm8evlgrhdnd93k9klc40j4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVvE95skw22vZOsjceUcLFkUgSXR_sVWY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475889931779-q60kdgcp8fm8evlgrhdnd93k9klc40j4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
