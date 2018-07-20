@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -25,6 +33,15 @@ public class MainActivity extends AppCompatActivity
         implements MyTestCallBack,View.OnClickListener{
     Button test_btn;
     TextView main_txtview;
+    TextView testFb_txtview; //For Firebase condition
+    Button fbSunny_btn, fbFoggy_btn;
+
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mconditioRef = mRootRef.child("condition");
+   // FirebaseDatabase database = FirebaseDatabase.getInstance();
+    //DatabaseReference myRef = database.getReference("condition");
+
+
     ServerUDPthread serverThread;
     static final int UDP_PORT = 48656;
     static boolean waitResponse;
@@ -58,7 +75,13 @@ public class MainActivity extends AppCompatActivity
         main_txtview = findViewById(R.id.main_tview_log);
         main_txtview.setMovementMethod(new ScrollingMovementMethod());
 
+        testFb_txtview = findViewById(R.id.tviewCondition);
+        fbFoggy_btn = findViewById(R.id.btn_Foggy);
+        fbSunny_btn = findViewById(R.id.btn_Sunny);
+
         waitResponse = true;
+
+        //myRef.setValue("RRRRRRRRR");
     }
 
     @Override
@@ -82,6 +105,13 @@ public class MainActivity extends AppCompatActivity
 //                    output_txtview.append(" Don't send: " + getCommandName() + " WAITING RESPONSE " + date + "\n");
 //                }
                 break;
+            case R.id.btn_Foggy:
+                break;
+            case R.id.btn_Sunny:
+                break;
+
+
+
         }
     }
 
@@ -94,7 +124,24 @@ public class MainActivity extends AppCompatActivity
 //        main_txtview.setText(srvRunMsg);
 
         Log.e("TAG", "STATE onStart" );
-          super.onStart();
+          mconditioRef.addValueEventListener(new ValueEventListener() {
+           // myRef.addValueEventListener(new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot dataSnapshot) {
+                  Log.e("TAG", "onDataChange() Firebase");
+                  String text = dataSnapshot.getValue(String.class);
+                  Log.e("TAG", "onDataChange() Firebase text: " + text);
+                  testFb_txtview.setText(text);
+              }
+
+              @Override
+              public void onCancelled(@NonNull DatabaseError databaseError) {
+
+              }
+          });
+        super.onStart();
+
+
     }
 //    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 //        @Override

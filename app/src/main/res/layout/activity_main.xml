@@ -33,4 +33,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/tviewCondition"
+        android:layout_width="178dp"
+        android:layout_height="26dp"
+        android:text="Condition"
+        android:textColor="@android:color/holo_orange_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="298dp" />
+
+    <Button
+        android:id="@+id/btn_Sunny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sunny"
+        tools:layout_editor_absoluteX="59dp"
+        tools:layout_editor_absoluteY="368dp" />
+
+    <Button
+        android:id="@+id/btn_Foggy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Foggy"
+        tools:layout_editor_absoluteX="217dp"
+        tools:layout_editor_absoluteY="368dp" />
+
 </android.support.constraint.ConstraintLayout>
